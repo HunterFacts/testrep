@@ -1,0 +1,66 @@
+{{page-title "Доход по компании"}}
+<div class="row francise no-bottom model-container">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <div class="card-content schedule-container">
+          <span class="card-title">Общий доход</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-content analytics">
+        {{ember-chart type=typeChart options=options data=chartData height=2 width=4}}
+      </div>
+    </div>
+  </div>
+
+  {{#each charts as |chart|}}
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <div class="card-content schedule-container">
+            <span class="card-title">Доход: {{chart.house.name}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content analytics">
+          {{ember-chart type=typeChart options=options data=chart.chart height=2 width=4}}
+        </div>
+      </div>
+    </div>
+  {{/each}}
+  {{#if isYearGraphic}}
+    <div class="col s12">
+      <div class="card">
+        <div class="card-content">
+          <div class="card-content schedule-container">
+            <span class="card-title">Доход за год</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content analytics">
+          {{ember-chart type=typeChart options=options data=chartYear height=2 width=4}}
+        </div>
+      </div>
+    </div>
+  {{else}}
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <div class="card-content schedule-container">
+          <span class="card-title">
+            Доход за год
+          </span>
+          <a class="btn loan-btn waves-effect waves-light" {{action 'loadYearGraphic'}}>Загрузить за год</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
+</div>
+
+
+{{outlet}}

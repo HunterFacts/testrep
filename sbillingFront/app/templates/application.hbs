@@ -1,0 +1,30 @@
+{{page-title "Security CRM"}}
+{{#if session.isAuthenticated}}
+{{navbar navbarCloseTrigger=sidenavTrigger routeTitle=routeTitle}}
+{{/if}}
+<div class="{{unless (user-agent "device.isDesktop") 'modal-mobile'}}">
+{{notification-manager
+  alertStatus=alertStatus
+  alertText=alertText
+  confirmText=confirmText
+  confirmTitle=confirmTitle
+  confirmYesCallback=confirmYesCallback
+  confirmNoCallback=confirmNoCallback
+  modalConfirmStatus=confirmStatus
+}}
+</div>
+{{#if preloader}}
+<div class="preloader">
+  <div class="container-fluid">
+    <div class="spinner">
+      <span class="ball-1"></span>
+      <span class="ball-2"></span>
+      <span class="ball-3"></span>
+      <span class="ball-4"></span>
+    </div>
+  </div>
+</div>
+{{/if}}
+<div class="container container-app {{unless (user-agent "device.isDesktop") 'mobile mobile-container'}}">
+  {{outlet}}
+</div>

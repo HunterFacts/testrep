@@ -1,0 +1,24 @@
+{{#if showContent}}
+<div class="list-table">
+  <table>
+    <thead>
+      <tr>
+          {{#each rows as |row|}}
+            <th>{{row.headerText}}</th>
+          {{/each}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lookupModel as |column|}}
+        <tr>
+        {{#each rows as |row|}}
+          <td {{action 'trClick' column}}>
+            {{lookup-helper column row.typeName}}
+          </td>
+        {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{/if}}

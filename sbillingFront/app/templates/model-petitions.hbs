@@ -1,0 +1,67 @@
+{{page-title "Обращения"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card card-group-edit card-add" {{action 'openPetition'}}>
+      <div class="card-content">
+        <i class="material-icons medium">control_point</i>
+      </div>
+    </div>
+  </div>
+  {{#each model as |petition|}}
+    <div class="col s12">
+      <div class="card card-group-edit petition-card">
+        {{#if (eq petition.status 'Отправлено')}}
+        <div class="delete-record">
+          <Tooltip>
+            <a class="secondary-content tooltipped" data-position="bottom" data-tooltip="Удалить" {{action 'deletePetition' petition}}><i class="material-icons">close</i></a>
+          </Tooltip>
+        </div>
+        {{/if}}
+        <div class="card-content">
+          <div class="petition-date-status"><span class="bouble">Запрошено {{date-transform petition.date 'date'}}</span><span class="bouble">Статус: {{petition.status}}</span><span class="bouble">Тип: {{petition.type}}</span></div>
+          <div class="petition-contaner">
+            <h5>Обращение #{{petition.numberPetition}}</h5>
+            <p class="message">{{petition.message}}</p>
+            <hr>
+          <div class="row">
+            <div class="col s11 offset-s1">
+              {{#each petition.answerPetition as |answer|}}
+                <div class="card card-group-edit petition-card petition-answer">
+                  <div class="card-content">
+                    <div class="petition-date-status"><span class="bouble">Сотрудник: {{answer.employee.fio}}</span><span class="bouble">Дата и время ответа: {{date-transform answer.date 'date'}} {{date-transform answer.date 'time'}}</span></div>
+                    <div class="petition-contaner">
+                      <br>
+                      <p class="message">{{answer.message}}</p>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+<Modal @modalOpen={{modalOpenNewPetition}}>
+  <div class="modal-content">
+    <h4>Обращение</h4>
+    <p>Выберите цель обращения и опишет вкратце, что произошло.</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Цель обращения</label>
+        {{dropdown value=typePetition collection="typePetition"}}
+      </div>
+      <div class="field">
+        <label for="">Опишите ситуацию</label>
+        {{textarea class="materialize-textarea" value=commentPetition rows="6"}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'petitionCreate'}}>Отправить обращение</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

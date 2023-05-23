@@ -1,0 +1,179 @@
+{{page-title "Компания"}}
+
+{{#if isModelEmpty}}
+   <div class="row francise">
+    <div class="col s12 center">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Компания отсуствует</span>
+          <p>Похоже у вас ещё нет компании, введите имя компании и нажмите кнопку создать</p>
+          <div class="row">
+            <div class="col s12 l8 offset-l2">
+              <div class="field">
+                <label for="">Наименование компании</label>
+                {{input value=workplaceName}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-action">
+          <a {{action 'createWorkplace'}}>Создать</a>
+          <LinkTo @route="dictionary">Отменить</LinkTo>
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="row francise francise-main">
+    <div class="col s12 center">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Компания {{model.name}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 center">
+      <div class="card">
+        <div class="card-content">
+          <div class="row">
+            <div class="col s8 offset-s2">
+              <div class="field">
+                <label for="">Сменить название компании</label>
+                {{input value=workplaceName}}
+              </div>
+              <div class="field">
+                <a class="waves-effect waves-light btn" {{action 'saveObject'}}>Сохранить</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 center">
+      <div class="card card-group-edit">
+        <div class="card-content">
+          <span class="card-title">Совладельцы</span>
+          {{#if (eq model.employee.length 0)}}
+            <p class="card-non">Данные отсутствуют</p>
+          {{/if}}
+          <div class="row list-data">
+            {{#each model.employee as |emp|}}
+              <div class="col s12 l3">
+                <a {{action 'deleteUser' emp.id}}>
+                  <div class="center data-card">
+                    <i class="material-icons hover-show">face</i>
+                    <p class="caption hover-show">{{emp.fio}}</p>
+                    <i class="material-icons hover-hide">close</i>
+                    <p class="caption hover-hide">Убрать</p>
+                  </div>
+                </a>
+              </div>
+            {{/each}}
+            <div class="col s12 l3">
+              <a {{action 'addNewUserOpenModal'}}>
+                <div class="center data-card">
+                  <i class="material-icons">add</i>
+                  <p class="caption">Добавить</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 center">
+      <div class="card card-group-edit">
+        <div class="card-content">
+          <span class="card-title">Точки</span>
+          {{#if (eq model.house.length 0)}}
+            <p class="card-non">Данные отсутствуют</p>
+          {{/if}}
+          <div class="row list-data">
+            {{#each model.house as |house|}}
+              <div class="col s12 l3">
+                <a {{action 'deleteHouse' house.id}}>
+                  <div class="center data-card">
+                    <i class="material-icons hover-show">gps_fixed</i>
+                    <p class="caption hover-show">{{house.name}}</p>
+                    <i class="material-icons hover-hide">close</i>
+                    <p class="caption hover-hide">Убрать</p>
+                  </div>
+                </a>
+              </div>
+            {{/each}}
+            <div class="col s12 l3">
+              <a {{action 'addNewTochkaOpenModal'}}>
+                <div class="center data-card">
+                  <i class="material-icons">add</i>
+                  <p class="caption">Добавить</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col s12 center">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Удалить компанию</span>
+          <p>При необходимости вы можете удалить компанию, но перед этим вам нужно удостовериться, что в компании нет точек и совладельцев (кроме вас)</p>
+          <br>
+          <div class="field center">
+            <a class="waves-effect waves-light btn btn-red" {{action 'deleteObject'}}>Удалить</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}
+<Modal @modalOpen={{modalOpenUsers}}>
+  <div class="modal-content">
+    <h4>Добавить совладельца</h4>
+    <p>Для добавления совладельца в компанию введите его логин (у него должна быть роль "Руководитель"), затем нажмите подтвердить</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Логин пользователя</label>
+        {{input value=userLogin}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addUser'}}>Подтвердить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{modalOpenTochka}}>
+  <div class="modal-content">
+    <h4>Добавить точку</h4>
+    <p>Для добавления точки заполните необходимые поля и нажмите создать</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">Наименование*</label>
+          {{input value=housename}}
+        </div>
+        <div class="field">
+          <label for="">Улица</label>
+          {{input value=housestreet}}
+        </div>
+      </div>
+      <div class="two-field">
+        <div class="field">
+          <label for="">Номер дома</label>
+          {{input value=housenum}}
+        </div>
+        <div class="field">
+          <label for="">Город*</label>
+          {{input value=housecity}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewHouse'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

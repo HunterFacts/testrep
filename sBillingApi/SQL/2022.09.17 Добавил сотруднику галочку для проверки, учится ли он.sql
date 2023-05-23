@@ -1,0 +1,2 @@
+ALTER TABLE Employee
+ADD studying bit NOT NULL DEFAULT 0;

@@ -1,0 +1,32 @@
+{{page-title "Аккаунт"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <div class="row">
+          <div class="two-field">
+            <div class="field">
+              <label for="">Аккаунт</label>
+              {{input value=model.name}}
+            </div>
+            <div class="field">
+              <label for="">Сотрудник</label>
+              {{lookup 
+              value=model.employee
+              modelname="employee"
+              filterName="workplace"
+              filterId=session.data.authenticated.workplace
+              rows=rowsEmployee
+              visibleValue='fio'
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-action">
+        <a {{action 'saveModel'}}>Сохранить</a>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}

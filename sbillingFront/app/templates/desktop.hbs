@@ -1,0 +1,89 @@
+{{page-title "Рабочий стол"}}
+
+<div class="row dictionary">
+  {{#if onlyManager}}
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="dictionary">
+      <div class="center dictionary-card">
+        <i class="material-icons">storage</i>
+        <p class="caption">Данные системы</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="charts">
+      <div class="center dictionary-card">
+        <i class="material-icons">timeline</i>
+        <p class="caption">Аналитика</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="workshifts-administrator">
+      <div class="center dictionary-card">
+        <i class="material-icons">cast_connected</i>
+        <p class="caption">Смены</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="appeals">
+      <div class="center dictionary-card">
+        <i class="material-icons">message</i>
+        <p class="caption">Обращения</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="loans">
+      <div class="center dictionary-card">
+        <i class="material-icons">attach_money</i>
+        <p class="caption">Авансы</p>
+      </div>
+    </LinkTo>
+  </div>
+  {{/if}}
+  {{#if onlyAdministrator}}
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="workshifts-administrator">
+      <div class="center dictionary-card">
+        <i class="material-icons">cast_connected</i>
+        <p class="caption">Смены</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="employees">
+      <div class="center dictionary-card">
+        <i class="material-icons">group</i>
+        <p class="caption">Сотрудники</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="accounts">
+      <div class="center dictionary-card">
+        <i class="material-icons">group</i>
+        <p class="caption">Аккаунты</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="appeals">
+      <div class="center dictionary-card">
+        <i class="material-icons">message</i>
+        <p class="caption">Обращения</p>
+      </div>
+    </LinkTo>
+  </div>
+  <div class="col s12 l4">
+    <LinkTo class="brand-logo" @route="production-workshifts">
+      <div class="center dictionary-card">
+        <i class="material-icons">access_time</i>
+        <p class="caption">Выработка смен</p>
+      </div>
+    </LinkTo>
+  </div>
+  {{/if}}
+</div>
+{{outlet}}

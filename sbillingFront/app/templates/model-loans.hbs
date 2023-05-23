@@ -1,0 +1,67 @@
+{{page-title "Авансы"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card card-group-edit card-add" {{action 'openLoan'}}>
+      <div class="card-content">
+        <i class="material-icons medium">control_point</i>
+      </div>
+    </div>
+  </div>
+  {{#each model as |loan|}}
+    <div class="col s12">
+      <div class="card card-group-edit petition-card">
+        {{#if (eq loan.status 'Запрошен')}}
+        <div class="delete-record">
+          <Tooltip>
+            <a class="secondary-content tooltipped" data-position="bottom" data-tooltip="Удалить" {{action 'deleteLoan' loan}}><i class="material-icons">close</i></a>
+          </Tooltip>
+        </div>
+        {{/if}}
+        <div class="card-content">
+          <div class="petition-date-status">
+            <span class="bouble">Запрошено {{date-transform loan.date 'date'}}</span>
+            <span class="bouble">Статус: {{loan.status}}</span>
+            <span class="bouble">Сумма: {{loan.amount}}</span>
+            <span class="bouble">Тип перевода: {{loan.receivingOption}}</span>
+          </div>
+          <div class="petition-contaner">
+            <h5>Займ #{{loan.numberLoan}}</h5>
+            <p class="message">Цель: {{loan.reason}}</p>
+            {{#unless (eq loan.requisite null)}}<p class="message">Реквизиты: {{loan.requisite}}</p>{{/unless}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+<Modal @modalOpen={{modalOpenLoan}}>
+  <div class="modal-content">
+    <h4>Занять {{loanAmount}} рублей</h4>
+    <p>Укажите сумму и цель для займа</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Сумма займа</label>
+        {{input value=loanAmount}}
+      </div>
+      <div class="two-field">
+        <div class="field">
+          <label for="">Способ перевода</label>
+          {{dropdown disabled=read value=loanType collection="loanType"}}
+        </div>
+        <div class="field">
+          <label for="">{{#if (eq loanType 'Перевод')}}*{{/if}}Реквизиты</label>
+          {{input value=loanRequisite}}
+        </div>
+      </div>
+      <div class="field">
+        <label for="">Цель займа</label>
+        {{textarea class="materialize-textarea" value=loanComment rows="6"}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'saveLoan'}}>Запросить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

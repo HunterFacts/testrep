@@ -1,0 +1,68 @@
+{{page-title "Обращение"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card card-group-edit petition-card">
+      <div class="card-content">
+        <div class="petition-date-status"><span class="bouble">Запрошено {{date-transform model.date 'date'}}</span><span class="bouble">Статус: {{model.status}}</span><span class="bouble">Тип: {{model.type}}</span></div>
+        <div class="petition-contaner">
+          <h5>Обращение #{{model.numberPetition}}</h5>
+          <p class="message">{{model.message}}</p>
+          <hr>
+          <div class="row">
+            <div class="col s11 offset-s1">
+              <div class="card card-group-edit card-add answer" {{action 'openModalAnswer'}}>
+                <div class="card-content">
+                  <i class="material-icons medium">control_point</i>
+                </div>
+              </div>
+              {{#each sortedModel as |answer|}}
+                <div class="card card-group-edit petition-card petition-answer">
+                  <div class="delete-record">
+                    <Tooltip>
+                      <a class="secondary-content tooltipped" data-position="bottom" data-tooltip="Удалить" {{action 'deleteAnswer' answer}}><i class="material-icons">close</i></a>
+                    </Tooltip>
+                  </div>
+                  <div class="card-content">
+                    <div class="petition-date-status"><span class="bouble">Сотрудник: {{answer.employee.fio}}</span><span class="bouble">Дата и время ответа: {{date-transform answer.date 'date'}} {{date-transform answer.date 'time'}}</span></div>
+                    <div class="petition-contaner">
+                      <br>
+                      <p class="message">{{answer.message}}</p>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalAnswer}}>
+  <div class="modal-content">
+    <h4>Ответить на обращение</h4>
+    <p>Напишите свой ответ на обращение</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Ваш ответ</label>
+        {{textarea class="materialize-textarea" value=commentPetition rows="6"}}
+      </div>
+      <div class="field">
+        <label for="">Решить обращение?</label>
+        <div class="switch">
+          <label>
+            Нет
+            {{input checked=solveAppeal type="checkbox"}}
+            <span class="lever"></span>
+            Да
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'answerCreate'}}>Отправить обращение</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

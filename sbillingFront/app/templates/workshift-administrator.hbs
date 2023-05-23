@@ -1,0 +1,277 @@
+{{page-title "WorkshiftAdministrator"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content schedule-container">
+        <span class="card-title">Активная комната {{currentRoom}}</span>
+        <p>Общее число токенов: {{#if onlyread}}{{totalTokens}}{{else}}{{model.token}}{{/if}}</p>
+        {{#unless model.isfull}}<p><b>Пересменка</b></p>{{/unless}}
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content schedule-container">
+        <div class="schedule-table">
+          <div class="schedule-header no-margin">
+            {{#each sortedModel as |roomOnWorkshift|}}
+              <div {{action 'changeRoom' roomOnWorkshift.room}} class="room-item">Комната {{roomOnWorkshift.room.numberRoom}}</div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 l6">
+    <div class="card">
+      <div class="card-content">
+        <h3>Смена {{date-transform model.date 'date'}}</h3>
+        <ul class="collection">
+          <li class="collection-item"><span class="bouble"><i class="material-icons">check_box</i>Статус: {{model.status}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">fast_forward</i>Начало: {{date-transform model.timestart 'time'}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">gps_fixed</i>Точка: {{model.house.name}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">fast_forward</i>Конец: {{date-transform model.timeend 'time'}} {{date-transform model.timeend 'date'}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">face</i>Ответственный: {{model.responsible.fio}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">attach_money</i>Токены: {{currentRoomOnWorkshift.token}}</span>{{#if onlyread}}<a class="waves-effect waves-light btn btn-purple" {{action 'openModalToken'}}>Изменить</a>{{/if}}</li>
+        </ul>
+        {{#if onlyread}}
+          <a class="waves-effect waves-light btn btn-purple" {{action 'closedWorkshift'}}>Закрыть смену</a>
+        {{else}}
+          {{#if onlyManager}}
+            <a class="waves-effect waves-light btn btn-purple" {{action 'openWorkshift'}}>Открыть смену</a>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+    {{#unless onlyread}}
+      <div class="card">
+        <div class="card-content">
+          <h5>Штрафы</h5>
+          {{list-table 
+            modelTable=penaltyReadOnly
+            rows=rowsPenalty
+            modelTitle="Штрафы"
+            btnAddVisible=false
+            bntDeleteOnRowVisible=false
+          }}
+        </div>
+      </div>
+    {{/unless}}
+  </div>
+  <div class="col s12 l6">
+    <div class="row list">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Сотрудники на смене</span>
+            {{list-table 
+              modelTable=currentRoomOnWorkshift.employeeOnWorkshift
+              rows=rows
+              parentRoute=parentRoute
+              modelTitle="Сотрудник на смене"
+              refresh=refreshTrigger
+              btnAddVisible=false
+              bntDeleteOnRowVisible=false
+              rowClick=(action 'clickEmployeeOnWorkshift')
+            }}
+            <br>
+            {{#if onlyread}}
+            <Tooltip>
+              <a class="btn-add-list tooltipped" data-position="bottom" data-tooltip="Добавить сотрудников на смену" {{action 'addEmployeeOpenModal'}}><i class="material-icons medium">add_circle_outline</i></a>
+            </Tooltip>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{#if onlyread}}
+<Modal @class="bottom-sheet list-picker" @modalOpen={{modalEmployeeStatus}}>
+  <div class="modal-content">
+    <h4>Добавить сотрудников</h4>
+    <p>Для добавления сотрудников необходимо выбрать сотрудников из левой таблица, далее нажать "Подтвердить". Для удаления сотрудников необходимо выбрать сотрудников из правого столбца и нажать "Подтвердить"</p>
+    {{#if (user-agent "device.isDesktop")}}
+    <div class="row">
+      <div class="col s6">
+        <h5>Доступные сотрудники</h5>
+        <div class="field">
+          <label for="">Поиск</label>
+          {{input value=search}}
+        </div>
+        <div class="table-container list-table">
+          <table>
+            <thead>
+              <tr>
+                  <th>Фио</th>
+                  <th>Логин</th>
+                  <th>Telegram</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each sortedModelMeta as |employeeAll|}}
+                <tr {{action 'employeeTRClick' employeeAll.id}} class="{{if employeeAll.colorSelect 'selected'}}">
+                  <td>{{employeeAll.fio}}</td>
+                  <td>{{employeeAll.user.login}}</td>
+                  <td>{{employeeAll.telegram}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col s6">
+        <h5>Сотрудники на смене</h5>
+        <div class="table-container list-table">
+          <table>
+            <thead>
+              <tr>
+                  <th>Фио</th>
+                  <th>Логин</th>
+                  <th>Telegram</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each currentRoomOnWorkshift.employeeOnWorkshift as |employeeOnWorkshift|}}
+                <tr {{action 'employeeWorkshiftTRClick' employeeOnWorkshift.id}} class="{{if employeeOnWorkshift.colorSelect 'selected-red'}}">
+                  <td>{{employeeOnWorkshift.employee.fio}}</td>
+                  <td>{{employeeOnWorkshift.employee.user.content.login}}</td>
+                  <td>{{employeeOnWorkshift.employee.telegram}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {{else}}
+      <div class="row">
+        <div class="col s12">
+        <h5>Доступные сотрудники</h5>
+        <div class="table-container list-table">
+          <table>
+            <thead>
+              <tr>
+                  <th>Фио</th>
+                  <th>Логин</th>
+                  <th>Telegram</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each sortedModelMeta as |employeeAll|}}
+                <tr {{action 'employeeTRClick' employeeAll.id}} class="{{if employeeAll.colorSelect 'selected'}}">
+                  <td>{{employeeAll.fio}}</td>
+                  <td>{{employeeAll.user.login}}</td>
+                  <td>{{employeeAll.telegram}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col s12">
+        <h5>Сотрудники на смене</h5>
+        <div class="table-container list-table">
+          <table>
+            <thead>
+              <tr>
+                  <th>Фио</th>
+                  <th>Логин</th>
+                  <th>Telegram</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each currentRoomOnWorkshift.employeeOnWorkshift as |employeeOnWorkshift|}}
+                <tr {{action 'employeeWorkshiftTRClick' employeeOnWorkshift.id}} class="{{if employeeOnWorkshift.colorSelect 'selected-red'}}">
+                  <td>{{employeeOnWorkshift.employee.fio}}</td>
+                  <td>{{employeeOnWorkshift.employee.user.content.login}}</td>
+                  <td>{{employeeOnWorkshift.employee.telegram}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'saveEmployees'}}>Подтвердить</a>
+    <a class="modal-close waves-effect waves btn-flat">Закрыть</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{modalAddToken}}>
+  <div class="modal-content">
+    <h4>Изменить количество токенов</h4>
+    <p>Заполните поле "Количество токенов", после нажмите подтвердить, старое значение токенов будет перезаписано</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Количество токенов</label>
+        {{input value=tokenNew}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addToken'}}>Подтвердить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{employeeModal}}>
+  <div class="modal-content">
+    <h4>Данные по сотруднику {{modelEmployee.employee.fio}}</h4>
+    <p>Указывайте токены только если сотрудник пришёл не вовремя, чтобы система правильно посчитала токены</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">Аккаунт</label>
+          {{lookup 
+            value=modelEmployee.account
+            modelname="account"
+            filterName="house"
+            filterId=session.data.authenticated.house
+            rows=rowsAccount
+            visibleValue='name'
+            disabled=false
+          }}
+        </div>
+        <div class="field">
+          <label for="">Заработанные токены</label>
+          {{input value=modelEmployee.token}}
+        </div>
+      </div>
+      <br>
+      <h4>Штрафы сотрудника</h4>
+        {{list-table 
+          modelTable=modelEmployeePenalty
+          rows=rowsPenalty
+          modelTitle="Штраф"
+          btnAddVisible=false
+          bntDeleteOnRowVisible=true
+        }}
+        <table>
+          <tbody>
+              <tr>
+                <td>
+                  <div class="field">
+                    {{input placeholder='Сумма штрафа (руб)' value=newPenaltyAmount}}
+                  </div>
+                </td>
+                <td>
+                  <div class="field">
+                    {{textarea class="materialize-textarea penalty-textarea" placeholder='Причина штрафа' value=newPenaltyReason rows="6"}}
+                  </div>
+                </td>
+                <td class="td-add-penalty">
+                  <a class="waves-effect waves-light btn btn-purple" {{action 'addPenalty'}}>Добавить штраф</a>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'saveEmployeeOnWorkshift'}}>Подтвердить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{/if}}

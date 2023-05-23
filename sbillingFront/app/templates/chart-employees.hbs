@@ -1,0 +1,77 @@
+{{page-title "Выработка по сотрудникам"}}
+<div class="col s12 l6">
+  <div class="card">
+    <div class="card-content">
+      <div class="arrows-container">
+        <h4>Неделя {{date-transform weekDate 'date'}}</h4>
+      </div>
+      <div class="dol-container">
+        <div class="field">
+          {{input class="dol-input" value=dolToRu }}
+        </div>
+        
+      </div>
+      <div class="search-and-add-fields">
+        <div class="field">
+          <label class="left-competitive" for="">Поиск</label>
+          {{input class="left-competitive" value=search }}
+          <a class="btn-floating btn-large waves-effect waves-light left" {{action 'minusWeek'}}><i class="material-icons">arrow_back</i></a>
+          <a style="float: right;" class="btn-floating btn-large waves-effect waves-light right" {{action 'plusWeek'}}><i class="material-icons">arrow_forward</i></a>
+        </div>
+      </div>
+      <div class="table-container list-table">
+        <table>
+          <thead>
+            <tr>
+              <th {{action 'sort' 'employee' 'fio'}} style="cursor: pointer;">Сотрудник (ФИО)</th>
+              <th {{action 'sort' 'workshiftsCount'}} style="cursor: pointer;">Смены за итерацию</th>
+              <th {{action 'sort' 'tokenWeekly'}} style="cursor: pointer;">ТК за итерацию</th>
+              <th style="cursor: pointer;">ДОЛ за итерацию</th>
+              <th style="cursor: pointer;">ЗП</th>
+              <th style="cursor: pointer;"><Tooltip><span class="tooltipped" data-position="bottom" data-tooltip="Сколько процентов получает сотрудник">Проц</span></Tooltip></th>
+              <th style="cursor: pointer;">В русских</th>
+              <th style="cursor: pointer;">Аванс</th>
+              <!--<th {{action 'sort' 'workshiftsCountMonth'}} style="cursor: pointer;">Смены за месяц</th>-->
+              <!--<th {{action 'sort' 'tokenMonth'}} style="cursor: pointer;">Токены за месяц</th>-->
+              
+            </tr>
+          </thead>
+          <tbody>
+            {{#if isSort}}
+              {{#each modelMeta as |employeeProduction|}}
+                <tr {{action 'chartEmployee' employeeProduction.employee.id}}>
+                  <td>{{employeeProduction.employee.fio}}</td>
+                  <td>
+                    {{#if (lte employeeProduction.workshiftNormally employeeProduction.workshiftsCount)}}
+                      <Tooltip>
+                        <a class="loan-btn tooltipped green-text" data-position="bottom" data-tooltip="Норматив смен выработан">{{employeeProduction.workshiftsCount}}</a>
+                      </Tooltip>       
+                      {{else}}
+                      <Tooltip>
+                        <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Недостаточно выработанных смен">{{employeeProduction.workshiftsCount}}</a>
+                      </Tooltip>       
+                      {{/if}}
+                  </td>
+                  <!--<td>{{employeeProduction.workshiftsCountMonth}}</td>-->
+                  <td>{{employeeProduction.tokenWeekly}}</td>
+                  <td>{{convert-dol employeeProduction.tokenWeekly}}</td>
+                  <td>{{convert-procent (convert-dol employeeProduction.tokenWeekly) employeeProduction.procent}}</td>
+                  <td>{{employeeProduction.procent}}%</td>
+                  <td>{{convert-toup (convert-procent (convert-dol employeeProduction.tokenWeekly) employeeProduction.procent) dolToRu}} 
+                    {{#if employeeProduction.loan}}
+                      ({{sub (convert-toup (convert-procent (convert-dol employeeProduction.tokenWeekly) employeeProduction.procent) dolToRu) employeeProduction.loan}})
+                    {{/if}}
+                    </td>
+                  <td>{{employeeProduction.loan}}</td>
+                  <!--<td>{{employeeProduction.tokenMonth}}</td>-->
+
+                </tr>
+              {{/each}}
+            {{/if}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}

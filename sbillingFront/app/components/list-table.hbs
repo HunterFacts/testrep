@@ -1,0 +1,56 @@
+
+{{#if visibleSearch}}
+<div class="search-and-add-fields">
+  <div class="field">
+    <label for="">Поиск</label>
+    {{input value=search}}
+    {{#if btnAddVisible}}
+      <a class="btn-floating btn-large waves-effect waves-light tooltipped add-btn" data-position="left" data-tooltip="Создать" {{action '_newItemAction'}}><i class="material-icons">add</i></a>
+    {{/if}}
+  </div>
+  
+</div>
+{{/if}}
+<div class="list-table">
+  <table>
+    <thead>
+      <tr>
+          {{#each rows as |row|}}
+            <th>{{row.headerText}}</th>
+          {{/each}}
+          {{#if bntDeleteOnRowVisible}}
+          <th></th>
+          {{/if}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each modelMeta as |column|}}
+        <tr>
+        {{#each rows as |row|}}
+          <td {{action 'trClick' column.id column}}>
+            {{#if row.isDate}}
+              {{date-transform (lookup-helper column row.typeName) 'date'}}
+            {{else}}
+              {{#if row.isTime}}
+                {{date-transform (lookup-helper column row.typeName) 'time'}}
+              {{else}}
+                {{#if row.onlyTime}}
+                  {{date-transform (lookup-helper column row.typeName) 'onlytime'}}
+                {{else}}
+                  {{lookup-helper column row.typeName}}
+                {{/if}}
+              {{/if}}
+            {{/if}}
+            
+          </td>
+        {{/each}}
+          {{#if bntDeleteOnRowVisible}}
+          <td class="delete-td"><a class="waves-effect waves-light" {{action 'btnDeleteClick' column.id}}>
+             <i class="material-icons">delete</i>
+          </a></td>
+          {{/if}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

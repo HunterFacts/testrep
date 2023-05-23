@@ -1,0 +1,23 @@
+{{#if alertStatus}}
+<div class="notificationBlack" {{action 'closeAlert'}}></div>
+<div class="notification-card">
+  <div class="notification-text">
+    {{alertText}}
+  </div>
+  <div class="notification-btn">
+    <a class="btn-enter" {{action 'closeAlert'}}>ОК</a>
+  </div>
+</div>
+{{/if}}
+
+<Modal @modalOpen={{modalConfirmStatus}} @closeCallback={{action '_confirmNoCallbackAction'}}>
+  <div class="modal-content">
+    <h4>{{confirmTitle}}</h4>
+    <p>{{confirmText}}</p>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action '_confirmYesCallbackAction'}}>Подтвердить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+

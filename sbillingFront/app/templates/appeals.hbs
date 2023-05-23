@@ -1,0 +1,20 @@
+{{page-title "Обращения"}}
+<div class="row list">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        {{list-table 
+          modelTable=model 
+          rows=rows
+          parentRoute=parentRoute
+          modelTitle="Обращение"
+          refreshTrigger=refreshTrigger
+          bntDeleteOnRowVisible=false
+          btnAddVisible=false
+          searchParameter="employee.fio"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}

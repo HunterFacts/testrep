@@ -1,0 +1,28 @@
+{{page-title "Займ"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card card-group-edit petition-card">
+      <div class="card-content">
+        <div class="petition-date-status">
+          <span class="bouble">Запрошено {{date-transform model.date 'date'}}</span>
+          <span class="bouble">Статус: {{model.status}}</span>
+          <span class="bouble">Сумма: {{model.amount}}</span>
+          <span class="bouble">Тип перевода: {{model.receivingOption}}</span>
+        </div>
+        <div class="petition-contaner">
+          <h5>Займ #{{model.numberLoan}}</h5>
+          <p class="message">Причина: {{model.reason}}</p>
+          {{#unless (eq model.requisite null)}}<p class="message">Реквизиты: {{model.requisite}}</p>{{/unless}}
+        </div>
+        <br>
+        <div class="loans-button">
+          {{#if (eq model.status 'Запрошен')}}<a class="waves-effect waves-light btn btn-purple" {{action 'accept'}}>Утвердить</a>{{/if}}
+          {{#if (eq model.status 'Запрошен')}}<a class="waves-effect waves-light btn btn-purple" {{action 'decline'}}>Отклонить</a>{{/if}}
+          {{#if (eq model.status 'Получен')}}<a class="waves-effect waves-light btn btn-purple" {{action 'veryGood'}}>Долг отдан</a>{{/if}}
+          {{#if (eq model.status 'Отдан')}}<a class="waves-effect waves-light btn btn-purple" {{action 'bad'}}>Долг не отдан</a>{{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}

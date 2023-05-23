@@ -1,0 +1,59 @@
+{{page-title "Выработка смен"}}
+<div class="col s12 l6">
+  <div class="card">
+    <div class="card-content">
+      <div class="arrows-container">
+        <a class="btn-floating btn-large waves-effect waves-light" {{action 'minusWeek'}}><i class="material-icons">arrow_back</i></a>
+        <h4>Неделя {{date-transform weekDate 'date'}}</h4>
+        <a style="float: right;" class="btn-floating btn-large waves-effect waves-light" {{action 'plusWeek'}}><i class="material-icons">arrow_forward</i></a>
+      </div>
+      <div class="field">
+        <label for="">Поиск</label>
+        {{input value=search }}
+      </div>
+      <div class="table-container list-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Сотрудник (ФИО)</th>
+              <th>Выработка смен за неделю</th>
+              <th>Выработка смен за месяц</th>
+              <th>Учится?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each modelMeta as |employeeProduction|}}
+              <tr>
+                <td>{{employeeProduction.employee.fio}}</td>
+                <td>
+                  {{#if (lte employeeProduction.workshiftNormally employeeProduction.workshiftsCount)}}
+                    <Tooltip>
+                      <a class="loan-btn tooltipped green-text" data-position="bottom" data-tooltip="Норматив смен выработан">{{employeeProduction.workshiftsCount}}</a>
+                    </Tooltip>       
+                    {{else}}
+                    <Tooltip>
+                      <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Недостаточно выработанных смен">{{employeeProduction.workshiftsCount}}</a>
+                    </Tooltip>       
+                    {{/if}}
+                </td>
+                <td>{{employeeProduction.workshiftsCountMonth}}</td>
+                <td>
+                  {{#if employeeProduction.employee.studying}}
+                    <Tooltip>
+                      <a class="tooltipped loan-btn" data-position="left" data-tooltip="Если сотрудник учится, то его норматив 4 смены, в обычном случае норматив 6 смен">Да</a>
+                    </Tooltip>  
+                  {{else}}
+                    <Tooltip>
+                      <a class="tooltipped loan-btn" data-position="left" data-tooltip="Если сотрудник учится, то его норматив 4 смены, в обычном случае норматив 6 смен">Нет</a>
+                    </Tooltip>  
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}

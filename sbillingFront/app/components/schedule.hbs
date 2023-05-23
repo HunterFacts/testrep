@@ -1,0 +1,57 @@
+{{#if onlyManager}}
+<br>
+<div class="row">
+  <div class="col s12">
+    <div class="bouble-tabs">
+      {{#each houses as |housetab|}}
+        <span class="bouble" {{action 'boubleHouseClick' housetab}}>{{housetab.name}}</span>
+      {{/each}}
+    </div>
+  </div>
+</div>
+{{/if}}
+<br>
+<br>
+<div class="schedule-table">
+  {{#if isLoaded}}
+  <div class="schedule-header">
+    {{#each rooms as |room|}}
+      <div class="room-item {{if (eq room.id activeRoom.id) "active" ""}}" {{action 'changeRoom' room}}>Комната {{room.numberRoom}}</div>
+    {{/each}}
+  </div>
+  <div class="schedule-body">
+    <div class="times-container">
+      {{#each sortedWorkshiftType as |workshiftType|}}
+        <div class="schedule-workshift-time">
+          {{workshiftType.timename}}
+        </div>
+      {{/each}}
+    </div>
+    <div class="data-container">
+      {{#each filterData as |schedule|}}
+        <div class="schedule-data">
+          <div class="schedule-date" {{action 'changeDate' schedule.date}}>{{date-transform schedule.date 'date'}}</div>
+          {{#each schedule.worktypes as |workshiftType|}}
+            {{#if workshiftType.workshiftcheck}}
+              <div class="schedule-row {{if (not-eq workshiftType.workshift.timeend null) "is-closed" "is-open"}}" {{action 'checkRow' workshiftType.workshift}}>
+                <div class="peoples">
+                  {{#each workshiftType.workshift.roomOnWorkshift.employeeOnWorkshift as |employeeOnWorkshift|}}
+                    {{employeeOnWorkshift.employee.fio}},
+                  {{/each}}
+                </div>
+                <div class="token">{{workshiftType.workshift.roomOnWorkshift.token}}</div>
+              </div>
+            {{else}}
+              <div class="schedule-row" {{action 'addNewRow' workshiftType.worktype schedule.date}}>
+                <div class="peoples">свободно</div>
+                <div class="token"></div>
+              </div>
+            {{/if}}
+          {{/each}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+</div>
+

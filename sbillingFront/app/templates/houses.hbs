@@ -1,0 +1,52 @@
+{{page-title "Точки"}}
+<div class="row list">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Точки</span>
+        {{list-table 
+          modelTable=model 
+          rows=rows
+          parentRoute=parentRoute
+          modelTitle="Точка"
+          refresh=refreshTrigger
+          newItemAction=(action 'newHouseOpenModal')
+          searchParameter="name"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalOpenTochka}}>
+  <div class="modal-content">
+    <h4>Добавить точку</h4>
+    <p>Для добавления точки заполните необходимые поля и нажмите создать</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">Наименование*</label>
+          {{input value=housename}}
+        </div>
+        <div class="field">
+          <label for="">Улица</label>
+          {{input value=housestreet}}
+        </div>
+      </div>
+      <div class="two-field">
+        <div class="field">
+          <label for="">Номер дома</label>
+          {{input value=housenum}}
+        </div>
+        <div class="field">
+          <label for="">Город*</label>
+          {{input value=housecity}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewHouse'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

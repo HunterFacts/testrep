@@ -1,0 +1,174 @@
+{{#if (user-agent "device.isDesktop")}}
+<nav>
+  <div class="nav-wrapper">
+    <ul class="left hide-on-med-and-down">
+      <li><a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">apps</i></a></li>
+    </ul>
+    <LinkTo class="brand-logo" @route="desktop">Security CRM</LinkTo>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a>{{username}}</a></li>
+      <li><a {{action 'exitApp'}}><i class="material-icons medium">exit_to_app</i></a></li>
+    </ul>
+  </div>
+</nav>
+<nav class="second-nav">
+  <div class="nav-wrapper">
+    <ul class="left hide-on-med-and-down">
+      <li><a class="sidenav-trigger"><i class="material-icons">stars</i></a></li>
+    </ul>
+    <a class="brand-logo">{{routeTitle}}</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a {{action 'backHistory'}}><i class="material-icons medium">arrow_back</i></a></li>
+    </ul>
+  </div>
+</nav>
+{{else}}
+<nav>
+  <div class="nav-wrapper">
+    <ul class="left hide-on-med-and-down">
+      <li><a class="sidenav-trigger"><i class="material-icons">stars</i></a></li>
+    </ul>
+    <a class="brand-logo">{{routeTitle}}</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a {{action 'backHistory'}}><i class="material-icons medium">arrow_back</i></a></li>
+    </ul>
+  </div>
+</nav>
+<nav class="menu-mobile">
+  <a data-target="slide-out" class="sidenav-trigger">
+    <div class="menu-item">
+      <i class="material-icons">menu</i>
+      <span>Меню</span>
+    </div>
+  </a>  
+  {{#if onlyManager}}
+  <LinkTo class="brand-logo" @route="dictionary">
+    <div class="menu-item">
+      <i class="material-icons">storage</i>
+      <span>Данные</span>
+    </div>
+  </LinkTo>
+  <LinkTo class="brand-logo" @route="charts">
+    <div class="menu-item">
+      <i class="material-icons">timeline</i>
+      <span>Аналитика</span>
+    </div>
+  </LinkTo>
+  <LinkTo class="brand-logo" @route="loans">
+    <div class="menu-item">
+      <i class="material-icons">attach_money</i>
+      <span>Авансы</span>
+    </div>
+  </LinkTo>
+
+  {{/if}}
+  {{#if onlyAdministrator}}
+    <LinkTo @route="workshifts-administrator">
+    <div class="menu-item">
+      <i class="material-icons">cast_connected</i>
+      <span>Смены</span>
+    </div>
+    </LinkTo>
+    <LinkTo @route="employees">
+    <div class="menu-item">
+      <i class="material-icons">contacts</i>
+      <span>Сотрудники</span>
+    </div>
+    </LinkTo>
+    <LinkTo @route="appeals">
+    <div class="menu-item">
+      <i class="material-icons">message</i>
+      <span>Обращения</span>
+    </div>
+    </LinkTo>
+  {{/if}}
+  {{#if onlyModel}}
+    <LinkTo @route="model-desktop">
+    <div class="menu-item">
+      <i class="material-icons">home</i>
+      <span>Главная</span>
+    </div>
+    </LinkTo>
+    <LinkTo @route="model-petitions">
+    <div class="menu-item">
+      <i class="material-icons">announcement</i>
+      <span>Обращения</span>
+    </div>
+    </LinkTo>
+    <LinkTo @route="model-loans">
+    <div class="menu-item">
+      <i class="material-icons">attach_money</i>
+      <span>Авансы</span>
+    </div>
+    </LinkTo>
+  {{/if}}
+</nav>
+{{/if}}
+<ul id="slide-out" class="sidenav">
+  <li><a>{{username}}</a></li>
+  <li><div class="divider"></div></li>
+  {{#if onlyManager}}
+    <li><a class="subheader">Данные системы</a></li>
+    <li>
+      <LinkTo @route="workplace"><i class="material-icons">flash_on</i>Компания</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="houses"><i class="material-icons">gps_fixed</i>Точки</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="employees"><i class="material-icons">group</i>Сотрудники</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="accounts"><i class="material-icons">account_circle</i>Аккаунты</LinkTo>
+    </li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Аналитика</a></li>
+    <li>
+      <LinkTo @route="chart-all"><i class="material-icons">storage</i>Доход компании</LinkTo>
+    </li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Управление</a></li>
+    <li>
+      <LinkTo @route="workshifts-administrator"><i class="material-icons">cast_connected</i>Смены</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="appeals"><i class="material-icons">message</i>Обращения</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="production-employee"><i class="material-icons">directions_run</i>Выработка</LinkTo>
+    </li>
+  {{/if}}
+  {{#if onlyAdministrator}}
+    <li>
+      <LinkTo @route="workshifts-administrator"><i class="material-icons">cast_connected</i>Смены</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="employees"><i class="material-icons">contacts</i>Сотрудники</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="accounts"><i class="material-icons">account_box</i>Аккаунты</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="appeals"><i class="material-icons">message</i>Обращения</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="production-workshifts"><i class="material-icons">access_time</i>Выработка смен</LinkTo>
+    </li>
+  {{/if}}
+  {{#if onlyModel}}
+    <li>
+      <LinkTo @route="model-desktop"><i class="material-icons">home</i>Главная</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="model-petitions"><i class="material-icons">announcement</i>Обращения</LinkTo>
+    </li>
+    <li>
+      <LinkTo @route="model-loans"><i class="material-icons">attach_money</i>Мои авансы</LinkTo>
+    </li> 
+    <li>
+      <LinkTo @route="model-transactions"><i class="material-icons">access_time</i>История смен</LinkTo>
+    </li> 
+  {{/if}}
+    <li><div class="divider"></div></li>
+    <li><a {{action 'exitApp'}}><i class="material-icons">exit_to_app</i>Выйти</a></li>
+</ul>

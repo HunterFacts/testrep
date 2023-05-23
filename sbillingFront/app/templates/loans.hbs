@@ -1,0 +1,58 @@
+{{page-title "Авансы"}}
+<div class="row list">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        {{list-table 
+          modelTable=model 
+          rows=rows
+          parentRoute=parentRoute
+          modelTitle="Авансы"
+          refreshTrigger=refreshTrigger
+          newItemAction=(action 'openModalNewLoan')
+          searchParameter="employee.fio"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalOpenLoan}}>
+  <div class="modal-content">
+    <h4>Добавить аванс</h4>
+    <p>Для добавления аванса заполните необходимые поля и нажмите создать</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">Сумма*</label>
+          {{input value=loan.amount}}
+        </div>
+        <div class="field">
+          <label for="">Сотрудник*</label>
+          {{lookup 
+            value=loan.employee
+            modelname="employee"
+            filterName="workplace"
+            filterId=session.data.authenticated.workplace
+            rows=rowsEmployee
+            visibleValue='fio'
+          }}
+        </div>
+      </div>
+      <div class="two-field">
+        <div class="field">
+           <label for="">Реквизиты</label>
+          {{input value=loan.requisite}}
+        </div>
+        <div class="field">
+          <label for="">Причина</label>
+          {{textarea class="materialize-textarea penalty-textarea" placeholder='Причина' value=loan.reason rows="6"}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewLoan'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

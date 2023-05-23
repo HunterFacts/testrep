@@ -1,0 +1,117 @@
+{{page-title "House"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <div class="row">
+          <div class="two-field">
+            <div class="field">
+              <label for="">Наименование</label>
+              {{input value=model.name}}
+            </div>
+            <div class="field">
+              <label for="">Улица</label>
+              {{input value=model.street}}
+            </div>
+          </div>
+          <div class="two-field">
+            <div class="field">
+              <label for="">Номер дома</label>
+              {{input value=model.houseNumber}}
+            </div>
+            <div class="field">
+              <label for="">Город</label>
+              {{input value=model.city}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-action">
+        <a {{action 'saveModel'}}>Сохранить</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Комнаты</span>
+        {{list-table 
+          modelTable=sortedRooms
+          rows=rows
+          modelTitle="Комната"
+          refresh=refreshTrigger
+          newItemAction=(action 'newRoomModal')
+          searchParameter="numberRoom"
+        }}
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Типы смен на точке</span>
+        {{list-table 
+          modelTable=sortedWorkshiftType
+          rows=rowsType
+          modelTitle="Тип смен"
+          refresh=refreshTrigger
+          newItemAction=(action 'newWTypeModal')
+          searchParameter="timename"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{roomModal}}>
+  <div class="modal-content">
+    <h4>Добавить комнату</h4>
+    <p>Укажите номер комнаты и нажмите создать</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Номер комнаты*</label>
+        {{input value=roomNumber}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewRoom'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{typeModal}}>
+  <div class="modal-content">
+    <h4>Добавить тип смен для точки</h4>
+    <p>Укажите номер комнаты и нажмите создать</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Наименование тип смены</label>
+        {{input value=typeNewModel.timename}}
+      </div>
+      <div class="field">
+        <label for="">Укажите время начала смены в формате (Часы:минуты), например 07:45</label>
+        {{ember-mask-input value=typeNewModel.timestart mask='00:00' bindMasked=true}}
+      </div>
+      <div class="field">
+        <label for="">Укажите время конца смены в формате (Часы:минуты), например 09:45</label>
+        {{ember-mask-input value=typeNewModel.timeend mask='00:00' bindMasked=true}}
+      </div>
+      <div class="field">
+        <label for="">Позицию тип смены (по которому он будет сортироваться на таблице, слева направо)</label>
+        {{ember-mask-input value=typeNewModel.position mask='000'}}
+      </div>
+      <div class="field">
+        <label for="">Пересменка?</label>
+        {{checkbox-switch 
+          value=typeNewModel.shiftchange
+          textOn='Да'
+          textOff='Нет'
+        }}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewWtype'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

@@ -1,0 +1,2 @@
+ALTER TABLE Workshift
+ADD isfull bit NOT NULL DEFAULT 1;

@@ -1,0 +1,146 @@
+{{page-title "Employee"}}
+<div class="row francise">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <div class="row">
+          <div class="two-field">
+            <div class="field">
+              <label for="">ФИО*</label>
+              {{input disabled=read value=model.fio}}
+            </div>
+            <div class="field">
+              <label for="">Дата рождения*</label>
+              {{ember-mask-input value=model.datebirth mask='0000.00.00' bindMasked=true disabled=read}}
+            </div>
+          </div>
+          <div class="two-field">
+            <div class="field">
+              <label for="">Возраст*</label>
+              {{input disabled=read value=model.age}}
+            </div>
+            <div class="field">
+              <label for="">Логин*</label>
+              {{input disabled=read value=model.user.login}}
+            </div>
+          </div>
+          {{#unless model.user.isPending}}
+          {{#if onlyManager}}
+          <div class="two-field">
+            <div class="field">
+              <label for="">Точка*</label>
+              {{lookup 
+              value=model.house
+              modelname="house"
+              filterName="workplace"
+              filterId=session.data.authenticated.workplace
+              rows=rowsHouse
+              visibleValue='name'
+              disabled=read
+              }}
+            </div>
+            <div class="field">
+              <label for="">Роль*</label>
+              {{dropdown disabled=read value=model.user.role collection="roles"}}
+            </div>
+          </div>
+          {{/if}}
+          {{/unless}}
+          <div class="two-field">
+            <div class="field">
+              <label for="">Telegram</label>
+              {{input disabled=read value=model.telegram}}
+            </div>
+            <div class="field">
+              <label for="">Телефон</label>
+              {{input disabled=read value=model.phone}}
+            </div>
+          </div>
+          <div class="two-field">
+            <div class="field">
+              <label for="">Учится?</label>
+              {{checkbox-switch 
+                value=model.studying
+                textOn='Да'
+                textOff='Нет'
+              }}
+            </div>
+            <div class="field">
+              <label for="">Процент, который получает сотрудник</label>
+              {{ember-mask-input value=model.procent mask='000' bindMasked=true disabled=read}}
+            </div>
+          </div>
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Рефералы</span>
+                {{list-table 
+                  modelTable=sortedReferral
+                  rows=rowsReferral
+                  modelTitle="Рефералы"
+                  refresh=refreshTrigger
+                  newItemAction=(action 'newReferralModal')
+                  searchParameter="give.fio"
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{#unless read}}
+      <div class="card-action">
+        <a {{action 'saveModel'}}>Сохранить</a>
+      </div>
+      {{/unless}}
+    </div>
+    <div class="card">
+      <div class="card-content">
+        <div class="row">
+            <div class="field">
+              <label for="">Пароль</label>
+              {{input disabled=read type=value value=localPassword}}
+            </div>
+        </div>
+      </div>
+      <div class="card-action">
+        <a {{action 'changePassword'}}>Сменить пароль</a>
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalAchievement}}>
+  <div class="modal-content">
+    <h4>{{modalAchievementObject.name}}</h4>
+    <p>{{modalAchievementObject.message}}</p>
+    <div class="achievement-image" style="background-image: url('./img/{{modalAchievementObject.image}}')">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-close waves-effect waves btn-flat">Закрыть</a>
+  </div>
+</Modal>
+
+<Modal @modalOpen={{modalReferralNew}}>
+    <div class="modal-content">
+    <h4>Добавить реферала</h4>
+    <p>Выберите сотрудника, чьи 10% будут переходить этому сотруднику</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Сотрудник</label>
+        {{lookup 
+          value=newReferral
+          modelname="employee"
+          filters=filtersReferral
+          rows=rowsEmployee
+          visibleValue='fio'
+          disabled=read
+          }}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewReferral'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

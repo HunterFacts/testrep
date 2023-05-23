@@ -1,0 +1,81 @@
+{{page-title "Сотрудники"}}
+<div class="row list">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        {{list-table 
+          modelTable=model 
+          rows=rows
+          parentRoute=parentRoute
+          modelTitle="Сотрудник"
+          refreshTrigger=refreshTrigger
+          newItemAction=(action 'newEmployeeOpenModal')
+          searchParameter="fio"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalOpenEmployee}}>
+  <div class="modal-content">
+    <h4>Добавить сотрудника</h4>
+    <p>Для добавления сотрудника заполните необходимые поля и нажмите создать</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">ФИО*</label>
+          {{input value=employee.fio}}
+        </div>
+        <div class="field">
+          <label for="">Дата рождения*</label>
+          {{ember-mask-input value=employee.datebirth mask='0000.00.00' bindMasked=true disabled=read}}
+        </div>
+      </div>
+      <div class="two-field">
+        <div class="field">
+          <label for="">Возраст*</label>
+          {{input value=employee.age}}
+        </div>
+        <div class="field">
+          <label for="">Логин*</label>
+          {{input value=employee.user.login}}
+        </div>
+      </div>
+      {{#if onlyManager}}
+      <div class="two-field">
+        <div class="field">
+          <label for="">Роль*</label>
+          {{dropdown value=employee.user.role collection="roles"}}
+        </div>
+        <div class="field">
+          <label for="">Точка*</label>
+          {{lookup 
+          value=employee.house
+          modelname="house"
+          filterName="workplace"
+          filterId=session.data.authenticated.workplace
+          rows=rowsHouse
+          visibleValue='name'
+          }}
+        </div>
+      </div>
+      {{/if}}
+      <div class="two-field">
+        <div class="field">
+          <label for="">Telegram</label>
+          {{input value=employee.telegram}}
+        </div>
+        
+        <div class="field">
+          <label for="">Телефон</label>
+          {{input value=employee.phone}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewEmployee'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

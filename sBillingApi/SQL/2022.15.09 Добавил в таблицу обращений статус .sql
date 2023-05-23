@@ -1,0 +1,2 @@
+ALTER TABLE Petition
+ADD [status] NVARCHAR(30) NULL;

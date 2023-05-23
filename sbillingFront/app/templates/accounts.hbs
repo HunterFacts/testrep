@@ -1,0 +1,48 @@
+{{page-title "Аккаунты"}}
+<div class="row list">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        {{list-table 
+          modelTable=model 
+          rows=rows
+          parentRoute=parentRoute
+          modelTitle="Аккаунт"
+          refreshTrigger=refreshTrigger
+          newItemAction=(action 'newAccountOpenModal')
+          searchParameter="name"
+        }}
+      </div>
+    </div>
+  </div>
+</div>
+<Modal @modalOpen={{modalOpenAccount}}>
+  <div class="modal-content">
+    <h4>Добавить аккаунт</h4>
+    <p>Для добавления аккаунта заполните необходимые поля и нажмите создать</p>
+    <div class="row">
+      <div class="two-field">
+        <div class="field">
+          <label for="">Аккаунт*</label>
+          {{input value=account.name}}
+        </div>
+        <div class="field">
+          <label for="">Сотрудник*</label>
+          {{lookup 
+          value=account.employee
+          modelname="employee"
+          filterName="workplace"
+          filterId=session.data.authenticated.workplace
+          rows=rowsEmployee
+          visibleValue='fio'
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'addNewAccount'}}>Создать</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+{{outlet}}

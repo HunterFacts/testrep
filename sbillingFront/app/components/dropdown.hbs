@@ -1,0 +1,12 @@
+<div class="dropdown-container">
+  <select>
+    <option value="" disabled selected></option>
+    {{#each values as |val|}}
+      {{#if (or (eq val value) postRender)}}
+        <option selected value="{{val}}">{{val}}</option>
+      {{else}}
+        <option value="{{val}}">{{val}}</option>
+      {{/if}}
+    {{/each}}
+  </select>
+</div>

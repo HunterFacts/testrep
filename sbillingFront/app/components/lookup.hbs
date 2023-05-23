@@ -1,0 +1,33 @@
+<div class="lookup-container">
+  <input type="text" class="lookup-input" value="{{lookupValue}}" {{action 'clickInput'}} readonly="true">
+  <button class="btn-lookup btn-lookup-delete" type="button" {{action 'clearData'}}><i class="material-icons">clear</i></button>
+</div>
+<div class="modal-lookup-container">
+<Modal @modalOpen={{modalOpenLookup}}>
+  <div class="modal-content">
+    <div class="row list">
+      <div class="col s12">
+        <div class="card">
+          <div class="card-content">
+            {{list-lookup
+              modelname=modelname
+              openTrigger=openTrigger
+              rows=rows
+              modelTitle=modelTitle
+              refreshTrigger=refreshTrigger
+              filterName=filterName
+              filterId=filterId
+              filters=filters
+              modalOpenLookup=modalOpenLookup
+              lookupObject=value
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'closeLookupModal'}}>Отменить</a>
+  </div>
+</Modal>
+</div>

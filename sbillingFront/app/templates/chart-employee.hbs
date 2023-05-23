@@ -1,0 +1,40 @@
+{{page-title "Карточка сотрудника"}}
+<div class="row francise">
+  <div class="col s12 l6">
+    <div class="card">
+      <div class="card-content">
+        <h3>Сотрудник</h3>
+        <ul class="collection">
+          <li class="collection-item"><span class="bouble"><i class="material-icons">account_circle</i>{{model.employee.fio}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">gps_fixed</i>{{model.house.name}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">local_phone</i>{{model.employee.phone}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">mail</i>Telegram: {{model.employee.telegram}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">person</i>Возраст: {{model.employee.age}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">person</i>Доход за неделю: {{model.modelData.tokenWeekly}}</span></li>
+          <li class="collection-item"><span class="bouble"><i class="material-icons">person</i>Доход за месяц: {{model.modelData.tokenMonth}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col s12 l6">
+    <div class="row list">
+      {{#if isLoadData}}
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content analytics">
+              <span class="card-title">За неделю</span>
+              {{ember-chart type=typeChart options=options data=chartWeek height=2 width=4}}
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content analytics">
+              <span class="card-title">За месяц</span>
+              {{ember-chart type=typeChart options=options data=chartMonth height=2 width=4}}
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+{{outlet}}

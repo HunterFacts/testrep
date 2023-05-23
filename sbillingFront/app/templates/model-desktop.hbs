@@ -1,0 +1,359 @@
+{{page-title "Главная страница"}}
+{{#if (user-agent "device.isDesktop")}}
+<SwiperContainer>
+  <SwiperSlide>
+    <div class="row francise no-bottom model-container">
+      <div class="col s4">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Топ 10 Недели</h4></li>
+              </ul>
+              <ul class="collection collection-max-height with-header">
+                {{#each raiting as |rait|}}
+                  <li class="collection-item avatar">
+                    <img src="./img/avatar-test.jpg" alt="" class="circle">
+                    <span class="title">{{rait.fio}}</span>
+                    <p>{{floor rait.token}} tokens
+                    </p>
+                    <a class="secondary-content"><i class="material-icons">grade</i></a>
+                    <hr>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col s4">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Информация</h4></li>
+              </ul>
+              <ul class="collection collection-max-height collection-not-padding with-header">
+                <li class="collection-item"><span class="bouble"><i class="material-icons">attach_money</i>Доход за неделю: {{model.tokenWeekly}}</span></li>
+                <li class="collection-item"><span class="bouble"><i class="material-icons">attach_money</i>Доход за месяц: {{model.tokenMonth}}</span></li>
+                <li class="collection-item"><span class="bouble"><i class="material-icons">assessment</i>Отработано смен: 
+                {{#if (lte model.workshiftNormally model.workshiftsCount)}}
+                <Tooltip>
+                  <a class="loan-btn tooltipped green-text" data-position="bottom" data-tooltip="Норматив смен выработан. Так держать!">{{model.workshiftsCount}}</a>
+                </Tooltip>       
+                {{else}}
+                <Tooltip>
+                  <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Вы не выработали нужное количестов смен">{{model.workshiftsCount}}</a>
+                </Tooltip>       
+                {{/if}}
+                
+                </span></li>
+                <li class="collection-item"><span class="bouble"><i class="material-icons">assessment</i>Займ: 
+                {{#if (gt model.loan 0)}}
+                  {{model.loan}}р
+                {{else}} 
+                  {{#if model.isLoan}}
+                    <Tooltip>
+                      <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Вы уже запросили сумму">{{model.loan}}р</a>
+                    </Tooltip>
+                  {{else}}
+                    <Tooltip>
+                      <a class="loan-btn tooltipped" data-position="bottom" data-tooltip="Запросить сумму" {{action 'openModalLoan'}}>{{model.loan}}р</a>
+                    </Tooltip>
+                  {{/if}}
+                {{/if}}
+                </span>
+                </li>
+              </ul>
+            </div>
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Штрафы</h4></li>
+              </ul>
+              {{#if (gt model.penaltyOnShifts.length 0)}}
+                <ul class="collection">
+                  {{#each model.penaltyOnShifts as |penalty|}}
+                  <li class="collection-item penalty-item">
+                    <span class="title">Штраф на {{penalty.amount}}руб.</span>
+                    <p>{{penalty.reason}}</p>
+                    <Tooltip>
+                      <a class="secondary-content tooltipped" data-position="bottom" data-tooltip="Оспорить" {{action 'openProblem' penalty}}><i class="material-icons">report_problem</i></a>
+                    </Tooltip>
+                  </li>
+                  {{/each}}
+                </ul>
+              {{else}}
+                <h6 class="not-penalty">У вас нет штрафов. Так держать!</h6>
+              {{/if}}
+              
+            </div>
+            <div class="row btn-model">
+              <LinkTo class="waves-effect waves-light btn" @route="model-petitions">Обращения</LinkTo>
+              <LinkTo class="waves-effect waves-light btn" @route="model-loans">Авансы</LinkTo>
+              <LinkTo class="waves-effect waves-light btn" @route="model-transactions">История смен</LinkTo>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col s4">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Топ 10 Месяца</h4></li>
+              </ul>
+              <ul class="collection collection-max-height collection-white-stars with-header">
+                {{#each raitingMonth as |rait|}}
+                  <li class="collection-item avatar">
+                    <img src="./img/avatar-test.jpg" alt="" class="circle">
+                    <span class="title">{{rait.fio}}</span>
+                    <p>{{floor rait.token}} tokens
+                    </p>
+                    <a class="secondary-content"><i class="material-icons">grade</i></a>
+                    <hr>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SwiperSlide>
+  <SwiperSlide>
+    <div class="row francise no-bottom model-container">
+      <div class="col s4">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Мои ачивки</h4></li>
+              </ul>
+              <ul class="collection collection-max-height with-header">
+                {{#each achievementsAll as |achievement|}}
+                  {{#if achievement.active}}
+                    <li class="collection-item avatar collection-achievement" {{action 'openAchievement' achievement}}>
+                      <div class="achievement-image small-img" style="background-image: url('./img/{{achievement.image}}')"></div>
+                      <span class="title">{{achievement.name}}</span>
+                      <a class="secondary-content"><i class="material-icons">grade</i></a>
+                      <hr>
+                    </li>
+                  {{/if}}
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SwiperSlide>
+</SwiperContainer>
+{{else}}
+<SwiperContainer>
+  <SwiperSlide>
+  <div class="row francise no-bottom model-container">
+    <div class="col s12 l6">
+      <div class="card">
+        <div class="card-content models-raiting">
+          <div class="row">
+            <ul class="collection with-header">
+              <li class="collection-header"><h4>Информация</h4></li>
+            </ul>
+            <ul class="collection collection-max-height collection-not-padding with-header">
+              <li class="collection-item"><span class="bouble"><i class="material-icons">attach_money</i>Доход за неделю: {{model.tokenWeekly}}</span></li>
+              <li class="collection-item"><span class="bouble"><i class="material-icons">attach_money</i>Доход за месяц: {{model.tokenMonth}}</span></li>
+              <li class="collection-item"><span class="bouble"><i class="material-icons">assessment</i>Отработано смен: 
+              {{#if (lte model.workshiftNormally model.workshiftsCount)}}
+              <Tooltip>
+                <a class="loan-btn tooltipped green-text" data-position="bottom" data-tooltip="Норматив смен выработан. Так держать!">{{model.workshiftsCount}}</a>
+              </Tooltip>       
+              {{else}}
+              <Tooltip>
+                <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Вы не выработали нужное количестов смен">{{model.workshiftsCount}}</a>
+              </Tooltip>       
+              {{/if}}
+              
+              </span></li>
+              <li class="collection-item"><span class="bouble"><i class="material-icons">assessment</i>Займ: 
+              {{#if (gt model.loan 0)}}
+                {{model.loan}}р
+              {{else}} 
+                {{#if model.isLoan}}
+                  <Tooltip>
+                    <a class="loan-btn tooltipped red-text" data-position="bottom" data-tooltip="Вы уже запросили сумму">{{model.loan}}р</a>
+                  </Tooltip>
+                {{else}}
+                  <Tooltip>
+                    <a class="loan-btn tooltipped" data-position="bottom" data-tooltip="Запросить сумму" {{action 'openModalLoan'}}>{{model.loan}}р</a>
+                  </Tooltip>
+                {{/if}}
+              {{/if}}
+              </span>
+              </li>
+            </ul>
+          </div>
+          <div class="row">
+            <ul class="collection with-header">
+              <li class="collection-header"><h4>Штрафы</h4></li>
+            </ul>
+            {{#if (gt model.penaltyOnShifts.length 0)}}
+              <ul class="collection">
+                {{#each model.penaltyOnShifts as |penalty|}}
+                <li class="collection-item penalty-item">
+                  <span class="title">Штраф на {{penalty.amount}}руб.</span>
+                  <p>{{penalty.reason}}</p>
+                  <Tooltip>
+                    <a class="secondary-content tooltipped" data-position="bottom" data-tooltip="Оспорить" {{action 'openProblem' penalty}}><i class="material-icons">report_problem</i></a>
+                  </Tooltip>
+                </li>
+                {{/each}}
+              </ul>
+            {{else}}
+              <h6 class="not-penalty">У вас нет штрафов. Так держать!</h6>
+            {{/if}}      
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </SwiperSlide>
+  <SwiperSlide>
+  <div class="row francise no-bottom model-container">
+    <div class="col s12 l6">
+      <div class="card">
+        <div class="card-content models-raiting">
+          <div class="row">
+            <ul class="collection with-header">
+              <li class="collection-header"><h4>Топ 10 Недели</h4></li>
+            </ul>
+            <ul class="collection collection-max-height with-header">
+              {{#each raiting as |rait|}}
+                <li class="collection-item avatar">
+                  <img src="../img/avatar-test.jpg" alt="" class="circle">
+                  <span class="title">{{rait.fio}}</span>
+                  <p>{{floor rait.token}} tokens
+                  </p>
+                  <a class="secondary-content"><i class="material-icons">grade</i></a>
+                  <hr>
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </SwiperSlide>
+  <SwiperSlide>
+    <div class="row francise no-bottom model-container">
+      <div class="col s12 l6">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Топ 10 Месяца</h4></li>
+              </ul>
+              <ul class="collection collection-max-height collection-white-stars with-header">
+                {{#each raitingMonth as |rait|}}
+                  <li class="collection-item avatar">
+                    <img src="../img/avatar-test.jpg" alt="" class="circle">
+                    <span class="title">{{rait.fio}}</span>
+                    <p>{{floor rait.token}} tokens
+                    </p>
+                    <a class="secondary-content"><i class="material-icons">grade</i></a>
+                    <hr>
+                  </li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SwiperSlide>
+    <SwiperSlide>
+    <div class="row francise no-bottom model-container">
+      <div class="col s12 l6">
+        <div class="card">
+          <div class="card-content models-raiting">
+            <div class="row">
+              <ul class="collection with-header">
+                <li class="collection-header"><h4>Мои ачивки</h4></li>
+              </ul>
+              <ul class="collection collection-max-height with-header">
+                {{#each achievementsAll as |achievement|}}
+                  {{#if achievement.active}}
+                    <li class="collection-item avatar collection-achievement" {{action 'openAchievement' achievement}}>
+                      <div class="achievement-image small-img" style="background-image: url('./img/{{achievement.image}}')"></div>
+                      <span class="title">{{achievement.name}}</span>
+                      <a class="secondary-content"><i class="material-icons">grade</i></a>
+                      <hr>
+                    </li>
+                  {{/if}}
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SwiperSlide>
+</SwiperContainer>
+{{/if}}
+<Modal @modalOpen={{modalOpenLoan}}>
+  <div class="modal-content">
+    <h4>Занять {{loanAmount}} рублей</h4>
+    <p>Укажите сумму и цель для займа</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Сумма займа</label>
+        {{input value=loanAmount}}
+      </div>
+      <div class="two-field">
+        <div class="field">
+          <label for="">Способ перевода</label>
+          {{dropdown disabled=read value=loanType collection="loanType"}}
+        </div>
+        <div class="field">
+          <label for="">{{#if (eq loanType 'Перевод')}}*{{/if}}Реквизиты</label>
+          {{input value=loanRequisite}}
+        </div>
+      </div>
+      <div class="field">
+        <label for="">Цель займа</label>
+        {{textarea class="materialize-textarea" value=loanComment rows="6"}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'saveLoan'}}>Запросить</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{modalOpenNewPetition}}>
+  <div class="modal-content">
+    <h4>Оспорить штраф</h4>
+    <p>Опишите, почему вы не согласны со штрафом.</p>
+    <div class="row">
+      <div class="field">
+        <label for="">Опишите ситуацию</label>
+        {{textarea class="materialize-textarea" value=commentPetition rows="6"}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves btn-flat" {{action 'petitionCreate'}}>Оспорить штраф</a>
+    <a class="modal-close waves-effect waves btn-flat">Отменить</a>
+  </div>
+</Modal>
+<Modal @modalOpen={{modalAchievement}}>
+  <div class="modal-content">
+    <h4>{{modalAchievementObject.name}}</h4>
+    <p>{{modalAchievementObject.message}}</p>
+    <div class="achievement-image" style="background-image: url('./img/{{modalAchievementObject.image}}')">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-close waves-effect waves btn-flat">Закрыть</a>
+  </div>
+</Modal>

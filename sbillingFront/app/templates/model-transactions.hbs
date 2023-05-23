@@ -1,0 +1,26 @@
+{{page-title "История"}}
+<div class="col s12 l6">
+  <div class="card">
+    <div class="card-content">
+      <div class="table-container list-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Токены</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each modelMeta as |modelTransaction|}}
+              <tr {{action 'toWorkshift' modelTransaction.workshift.id}}>
+                <td>{{date-transform modelTransaction.workshift.timestart 'date'}}</td>
+                <td>{{modelTransaction.employeeOnWorkshift.token}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{outlet}}
